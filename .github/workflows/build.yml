@@ -178,7 +178,7 @@ jobs:
         with:
           usesh: true
           prepare: |
-            /usr/sbin/pkg_add meson ninja
+            /usr/sbin/pkg_add meson ninja-build
           run: |
             meson setup build --buildtype=release
             meson compile -C build
