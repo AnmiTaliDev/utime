@@ -1,3 +1,8 @@
+# Build directories
+build/
+build_*/
+.cache/
+
 # Prerequisites
 *.d
 
@@ -35,6 +40,7 @@
 *.i*86
 *.x86_64
 *.hex
+utime
 
 # Debug files
 *.dSYM/
@@ -50,3 +56,16 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Backup files
+*.bak
+*.old
+*_old.c
+*_old.h
