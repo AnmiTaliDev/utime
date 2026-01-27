@@ -89,9 +89,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: macos-13
+          - os: macos-latest
             arch: x86_64
-          - os: macos-14
+          - os: macos-latest
             arch: aarch64
     name: macOS ${{ matrix.arch }}
     steps:
