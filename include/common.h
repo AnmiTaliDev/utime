@@ -9,7 +9,7 @@
 
 #include <time.h>
 
-#define VERSION "2.1.0"
+#define VERSION "2.1.1"
 #define AUTHOR "AnmiTaliDev"
 #define AUTHOR_EMAIL "anmitali198@gmail.com"
 

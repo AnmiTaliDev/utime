@@ -16,6 +16,11 @@
 #include "../include/conversion.h"
 #include "../include/parser.h"
 
+/* ANSI color codes */
+#define COLOR_RESET   "\033[0m"
+#define COLOR_RED     "\033[31m"
+#define COLOR_GREEN   "\033[32m"
+
 /* Convert Unix timestamp to other formats */
 long long unix_to_ntp(long long unix_time) {
     return unix_time + SECONDS_1900_TO_1970;
@@ -45,7 +50,7 @@ long long julian_to_unix(double jd) {
 int convert_human_to_timestamp(const char *datetime_str, int use_utc, time_format_t format) {
     struct tm tm;
     if (parse_datetime(datetime_str, &tm, use_utc) != 0) {
-        fprintf(stderr, "Error: Invalid datetime format\n");
+        fprintf(stderr, COLOR_RED "Error:" COLOR_RESET " Invalid datetime format\n");
         fprintf(stderr, "Expected: YYYY-MM-DD HH:MM:SS\n");
         fprintf(stderr, "Example: \"2024-05-24 15:30:45\"\n");
         return 1;
@@ -55,7 +60,7 @@ int convert_human_to_timestamp(const char *datetime_str, int use_utc, time_forma
     time64_t unix_time = tm_to_time64(&tm, use_utc);
     
     if (unix_time == TIME64_ERROR) {
-        fprintf(stderr, "Error: Failed to convert datetime\n");
+        fprintf(stderr, COLOR_RED "Error:" COLOR_RESET " Failed to convert datetime\n");
         fprintf(stderr, "The date may be invalid\n");
         return 1;
     }
@@ -63,16 +68,16 @@ int convert_human_to_timestamp(const char *datetime_str, int use_utc, time_forma
     // Convert to requested format
     switch (format) {
         case TIME_FORMAT_UNIX:
-            printf("%lld\n", unix_time);
+            printf(COLOR_GREEN "%lld" COLOR_RESET "\n", unix_time);
             break;
         case TIME_FORMAT_NTP:
-            printf("%lld\n", unix_to_ntp(unix_time));
+            printf(COLOR_GREEN "%lld" COLOR_RESET "\n", unix_to_ntp(unix_time));
             break;
         case TIME_FORMAT_APPLE:
-            printf("%lld\n", unix_to_apple(unix_time));
+            printf(COLOR_GREEN "%lld" COLOR_RESET "\n", unix_to_apple(unix_time));
             break;
         case TIME_FORMAT_JULIAN:
-            printf("%.6f\n", unix_to_julian(unix_time));
+            printf(COLOR_GREEN "%.6f" COLOR_RESET "\n", unix_to_julian(unix_time));
             break;
     }
     
@@ -90,7 +95,7 @@ int convert_timestamp_to_human(const char *timestamp_str, int use_utc, time_form
         double jd = strtod(timestamp_str, &endptr);
         
         if (errno != 0 || *endptr != '\0' || endptr == timestamp_str) {
-            fprintf(stderr, "Error: Invalid Julian Day number\n");
+            fprintf(stderr, COLOR_RED "Error:" COLOR_RESET " Invalid Julian Day number\n");
             fprintf(stderr, "Must be a valid decimal number\n");
             fprintf(stderr, "Example: 2460000.5\n");
             return 1;
@@ -104,7 +109,7 @@ int convert_timestamp_to_human(const char *timestamp_str, int use_utc, time_form
         long long timestamp_ll = strtoll(timestamp_str, &endptr, 10);
         
         if (errno != 0 || *endptr != '\0' || endptr == timestamp_str) {
-            fprintf(stderr, "Error: Invalid timestamp\n");
+            fprintf(stderr, COLOR_RED "Error:" COLOR_RESET " Invalid timestamp\n");
             fprintf(stderr, "Must be a valid integer\n");
             fprintf(stderr, "Example: 1716556245\n");
             return 1;
@@ -130,7 +135,7 @@ int convert_timestamp_to_human(const char *timestamp_str, int use_utc, time_form
     // Use 64-bit time conversion
     struct tm tm;
     if (time64_to_tm(unix_time, &tm, use_utc) != 0) {
-        fprintf(stderr, "Error: Failed to convert timestamp\n");
+        fprintf(stderr, COLOR_RED "Error:" COLOR_RESET " Failed to convert timestamp\n");
         fprintf(stderr, "Value may be out of range\n");
         return 1;
     }

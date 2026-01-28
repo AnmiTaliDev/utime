@@ -12,12 +12,17 @@
 #include "../include/conversion.h"
 #include "../include/ui.h"
 
+/* ANSI color codes */
+#define COLOR_RESET   "\033[0m"
+#define COLOR_YELLOW  "\033[33m"
+#define COLOR_RED     "\033[31m"
+
 int main(int argc, char *argv[]) {
     // Warning for 32-bit systems
     #if LONG_MAX == 2147483647L
     static int warning_shown = 0;
     if (!warning_shown) {
-        fprintf(stderr, "⚠ NOTE: Running on 32-bit system.\n");
+        fprintf(stderr, COLOR_YELLOW "⚠ NOTE:" COLOR_RESET " Running on 32-bit system.\n");
         fprintf(stderr, "   Using software 64-bit time emulation.\n");
         fprintf(stderr, "   Dates beyond 2038 are supported, but may be slower.\n");
         fprintf(stderr, "   For best performance, consider upgrading to 64-bit.\n\n");
@@ -41,7 +46,7 @@ int main(int argc, char *argv[]) {
             use_utc = 1;
         } else if (strcmp(argv[i], "-f") == 0 || strcmp(argv[i], "--format") == 0) {
             if (i + 1 >= argc) {
-                fprintf(stderr, "Error: -f/--format requires an argument\n");
+                fprintf(stderr, COLOR_RED "Error:" COLOR_RESET " -f/--format requires an argument\n");
                 fprintf(stderr, "Run '%s --help' for usage information\n", argv[0]);
                 return 1;
             }
@@ -55,17 +60,17 @@ int main(int argc, char *argv[]) {
             } else if (strcmp(argv[i], "jd") == 0 || strcmp(argv[i], "julian") == 0) {
                 format = TIME_FORMAT_JULIAN;
             } else {
-                fprintf(stderr, "Error: Unknown format: %s\n", argv[i]);
+                fprintf(stderr, COLOR_RED "Error:" COLOR_RESET " Unknown format: %s\n", argv[i]);
                 fprintf(stderr, "Valid formats: unix, ntp, apple, jd\n");
                 return 1;
             }
         } else if (argv[i][0] == '-' && argv[i][1] != '\0' && (argv[i][1] < '0' || argv[i][1] > '9')) {
-            fprintf(stderr, "Error: Unknown option: %s\n", argv[i]);
+            fprintf(stderr, COLOR_RED "Error:" COLOR_RESET " Unknown option: %s\n", argv[i]);
             fprintf(stderr, "Run '%s --help' for usage information\n", argv[0]);
             return 1;
         } else {
             if (input != NULL) {
-                fprintf(stderr, "Error: Multiple inputs provided\n");
+                fprintf(stderr, COLOR_RED "Error:" COLOR_RESET " Multiple inputs provided\n");
                 fprintf(stderr, "Run '%s --help' for usage information\n", argv[0]);
                 return 1;
             }
